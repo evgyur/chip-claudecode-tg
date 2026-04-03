@@ -22,7 +22,7 @@ Clone or copy the `chip-claudecode-tg/` folder into your OpenClaw skills directo
 
 Example:
 ```bash
-git clone <THIS_REPO_URL> /tmp/chip-claudecode-tg && mkdir -p ~/.openclaw/skills/public && cp -R /tmp/chip-claudecode-tg/chip-claudecode-tg ~/.openclaw/skills/public/
+git clone https://github.com/evgyur/chip-claudecode-tg.git /tmp/chip-claudecode-tg && mkdir -p ~/.openclaw/skills/public && cp -R /tmp/chip-claudecode-tg/chip-claudecode-tg ~/.openclaw/skills/public/
 ```
 
 ## Main files
