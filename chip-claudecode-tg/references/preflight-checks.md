@@ -53,3 +53,12 @@ acpx claude exec "Reply exactly: ACP Claude backend OK"
 - `haiku`
 
 Не считать длинные provider/model ids гарантированно рабочими, пока это не подтверждено на живом backend.
+
+
+## 7) Warmup after restart
+After a gateway restart, `acpx` may report temporarily unavailable even though the backend is still warming up.
+
+Practical rule:
+- do not treat the first failed `/acp status` immediately after restart as final proof that the whole setup is broken;
+- wait a moment and retry;
+- if a persistent session still looks dead after warmup, reset or heal that session state before rebuilding the whole Telegram binding.

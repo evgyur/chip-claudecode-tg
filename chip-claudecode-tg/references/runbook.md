@@ -130,3 +130,17 @@
 - `/acp model opus` или `/acp model sonnet` отвечает
 - обычный prompt в `Codex Control` получает ответ от Claude ACP
 - онбординг не врёт и соответствует live-поведению
+
+
+## Third footgun — restart warmup and stale persistent sessions
+Two different failures can look identical from Telegram:
+- the backend is still warming up after restart;
+- the persistent Claude session is stuck in a stale error/dead state.
+
+Do not immediately rebuild the whole cockpit.
+
+Safer sequence:
+1. confirm `acpx` backend is actually ready
+2. retry `/acp status` after warmup
+3. if ordinary prompts still fail, reset or heal only the affected Claude session
+4. only then consider deeper config surgery

@@ -38,3 +38,9 @@ For `acpx/claude`, prefer backend-native model ids such as:
 - `haiku`
 
 Do not assume long provider/model ids are the canonical control surface unless you have confirmed that on your live backend.
+
+## Operational notes
+- After a gateway restart, `acpx` may need a short warmup window before Telegram `/acp` commands succeed.
+- For `acpx/claude`, prefer backend-native model ids like `opus`, `sonnet`, and `haiku`.
+- Do not assume long ids like `anthropic/claude-opus-4-6` are always the real runtime truth unless you have verified that on your live backend.
+- If a persistent ACP Claude session gets stuck after a restart, reset or heal the session state before assuming the whole integration is broken.
