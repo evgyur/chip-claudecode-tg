@@ -1,6 +1,6 @@
 ---
 name: chip-claudecode-tg
-description: "Builds or maintains a Telegram-based Claude Code cockpit for OpenClaw: a dedicated supergroup with topics, a bound ACP Claude agent, working /acp commands, Claude CLI login checks, and a clean topic-per-workstream workflow. Use when someone wants a separate Telegram room where ordinary messages go to Claude ACP instead of a generic cockpit agent."
+description: "Guides setup and maintenance of a Telegram-based Claude cockpit for OpenClaw: a dedicated supergroup with topics, a bound ACP Claude agent, working /acp commands, Claude CLI preflight checks, and a repeatable operator flow. Use when someone wants a separate Telegram room where ordinary messages go to Claude ACP instead of a generic cockpit agent."
 ---
 
 # chip-claudecode-tg
@@ -17,15 +17,23 @@ description: "Builds or maintains a Telegram-based Claude Code cockpit for OpenC
 - проверку, что Claude CLI запущен на том же сервере и уже залогинен
 - воспроизводимый публичный runbook без приватных привязок
 
-## Что делает скилл
-1. Создаёт или обслуживает Telegram supergroup под Claude ACP
-2. Включает topics
-3. Добавляет Telegram-бота и поднимает его в admin
-4. Создаёт базовую структуру тем
-5. Создаёт отдельный OpenClaw agent под Claude cockpit
-6. Привязывает `Codex Control` topic к persistent ACP Claude runtime
-7. Проверяет `acpx` backend, Claude CLI и login state
-8. Даёт понятный онбординг для ежедневной работы
+## Что этот скилл реально даёт
+Этот скилл даёт:
+1. правильную структуру Claude cockpit
+2. operator runbook для поднятия чата, agent и binding
+3. preflight по `acpx`, Claude CLI и login state
+4. onboarding для ежедневной работы
+5. checklist и troubleshooting notes для типовых failure modes
+
+## Что он НЕ делает магически
+Этот скилл сам по себе не гарантирует, что:
+- Claude CLI уже установлен
+- Claude CLI уже залогинен
+- Telegram чат можно создать без нужных прав/runtime-path
+- любой provider/model id корректно маппится в ваш live backend
+- весь контур поднимется «одной кнопкой» без операторских шагов
+
+Его задача — не магия, а **правильная архитектура и правильный порядок действий**.
 
 ## Базовая структура topics
 По умолчанию использовать такую схему:
@@ -81,7 +89,7 @@ description: "Builds or maintains a Telegram-based Claude Code cockpit for OpenC
 ## Output contract
 Когда этот скилл используется, вернуть:
 1. структура Claude cockpit
-2. как пользователь начинает работу
+2. что оператор должен сделать вручную
 3. какие `/acp` команды нужны ежедневно
 4. проходит ли preflight по `acpx` и Claude CLI
 5. какой model id использовать для реального backend

@@ -132,7 +132,7 @@
 - онбординг не врёт и соответствует live-поведению
 
 
-## Third footgun — restart warmup and stale persistent sessions
+## Troubleshooting footgun — restart warmup and stale persistent sessions
 Two different failures can look identical from Telegram:
 - the backend is still warming up after restart;
 - the persistent Claude session is stuck in a stale error/dead state.
