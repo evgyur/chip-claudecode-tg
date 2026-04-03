@@ -30,6 +30,8 @@ This repo gives you:
 - runbook docs
 - Claude CLI / ACP preflight checklist
 - troubleshooting notes for model selection, warmup, and persistent-session recovery
+- a public checklist of the OpenClaw behaviors that make Claude ACP persistent mode reliable
+- sanitized rollout notes for updating a self-hosted OpenClaw install without leaking local secrets
 
 ## What this skill does NOT do
 This repo does **not**:
@@ -77,6 +79,9 @@ Typical intent:
 - `chip-claudecode-tg/references/model-selection.md`
 - `chip-claudecode-tg/references/quick-test-checklist.md`
 - `chip-claudecode-tg/references/manual-review-checklist.md`
+- `chip-claudecode-tg/references/openclaw-required-behaviors.md`
+- `chip-claudecode-tg/references/recovery-matrix.md`
+- `chip-claudecode-tg/references/self-hosted-rollout.md`
 
 ## Important model note
 For `acpx/claude`, prefer backend-native model ids such as:
@@ -91,6 +96,8 @@ Do not assume long provider/model ids are the canonical control surface unless y
 - A persistent ACP Claude session can look dead even when the overall integration is recoverable.
 - If a persistent Claude session gets stuck after a restart, reset or heal the session state before rebuilding the whole cockpit.
 - Treat the first failed `/acp status` right after restart as a signal to verify warmup, not as final proof that the entire setup is broken.
+- A generic `ACP_TURN_FAILED` with `acpx exited with code 1` can be a Claude session or extra-usage cap, not only a broken Telegram binding.
+- Stable persistent mode depends on OpenClaw preserving the right `cwd` and `backend`, not replaying stale `model` values, and refusing to resurrect dead ACP identities.
 
 ## Success in 5 minutes
 A successful setup looks like this:

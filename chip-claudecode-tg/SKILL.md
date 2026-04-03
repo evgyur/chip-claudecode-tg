@@ -85,6 +85,9 @@ description: "Guides setup and maintenance of a Telegram-based Claude cockpit fo
 - [Quick test checklist](references/quick-test-checklist.md)
 - [Manual review checklist](references/manual-review-checklist.md)
 - [Model selection note](references/model-selection.md)
+- [OpenClaw behaviors required for reliable Claude ACP persistence](references/openclaw-required-behaviors.md)
+- [Recovery matrix: warmup, stale identity, quota, and model drift](references/recovery-matrix.md)
+- [Self-hosted rollout notes for shipping these fixes](references/self-hosted-rollout.md)
 
 ## Output contract
 Когда этот скилл используется, вернуть:
@@ -94,3 +97,4 @@ description: "Guides setup and maintenance of a Telegram-based Claude cockpit fo
 4. проходит ли preflight по `acpx` и Claude CLI
 5. какой model id использовать для реального backend
 6. какие конфиг-риски или footguns остались
+7. хватает ли в текущем OpenClaw нужных ACP behaviors для стабильного persistent Claude path
