@@ -9,6 +9,25 @@
 - Основной control-topic — `Codex Control`
 - После первичной настройки можно писать обычным текстом
 
+## Важная оговорка про режим установки
+У этого cockpit есть два нормальных режима:
+
+### Hardened mode
+- оператор разрешил live patch установленного OpenClaw runtime
+- persistent Claude cockpit обычно переживает сбои лучше
+- но этот patch может слететь после обновления OpenClaw
+
+### Portable mode
+- системные/runtime-файлы не патчились
+- cockpit всё ещё рабочий, но менее “самолечащийся”
+- после restart или stale-session кейса иногда нормально и ожидаемо сделать:
+  1. `/acp status`
+  2. если нужно — `/acp reset`
+  3. `/acp model opus` или `/acp model sonnet`
+  4. заново отправить обычный prompt
+
+Если у тебя portable mode, не считай это поломкой само по себе. Это просто более мягкий режим без install-time runtime patch layer.
+
 ## Что где делать
 ### `Codex Control`
 Используй для:
@@ -64,11 +83,17 @@
 - что Claude CLI залогинен на этом же сервере
 - что команда отправлялась человеком, а не ботом самому себе
 
+Если у тебя portable mode, ещё проверь:
+- не было ли только что restart / warmup window
+- не помогает ли обычный `/acp reset` + повтор prompt
+
 ### `/acp model opus` “сработал”, но реальный backend не сменился
 Лечение:
 1. `/acp reset`
 2. `/acp model opus`
 3. заново отправить обычный prompt
+
+Это особенно нормально в portable mode после restart или recovery.
 
 ### Claude CLI не залогинен
 Нужно войти именно в том server/user context, где работает OpenClaw runtime. См. `preflight-checks.md`.

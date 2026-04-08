@@ -129,3 +129,15 @@ When a Claude cockpit topic stops answering, use this order:
 6. only then do broader config surgery
 
 This order avoids a lot of wasted work.
+
+## Mode note: hardened vs portable
+
+If the operator chose **hardened mode**:
+- stronger self-heal is expected
+- stale-session recovery should be more automatic
+- but the runtime patch layer may be overwritten by updates
+
+If the operator chose **portable mode**:
+- expect a more manual recovery path
+- `/acp reset` + model re-selection + a second ordinary prompt is a normal fix, not necessarily evidence of a broken install
+- do not oversell this as perfect persistence; it is a safer no-system-patch mode with more operator-visible recovery

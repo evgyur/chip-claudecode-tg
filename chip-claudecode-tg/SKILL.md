@@ -46,6 +46,11 @@ description: "Guides setup and maintenance of a Telegram-based Claude cockpit fo
 Если у пользователя уже есть своя проектная структура — адаптировать, а не навязывать эту сетку.
 
 ## Правила работы
+- Перед любыми install/recovery-правками агент обязан задать один явный вопрос: пользователь хочет **hardened mode** или **portable mode**.
+- **Hardened mode** = разрешить live patch установленного OpenClaw runtime ради лучшей устойчивости persistent Claude cockpit.
+- **Portable mode** = не трогать системные/runtime-файлы; cockpit всё ещё настраивается и может нормально работать, но recovery после restart/stale-session событий будет слабее и чаще потребует `/acp reset`, warmup или повторной попытки.
+- Агент не должен молча выбирать hardened mode за пользователя.
+- Если выбран hardened mode, агент обязан заранее сказать, что такой патч может быть перезаписан будущим `openclaw update` или package update.
 - **Один topic = один workstream**
 - Не мешать несколько независимых задач в одной ветке
 - `Codex Control` держать для bind/status/control
@@ -77,6 +82,7 @@ description: "Guides setup and maintenance of a Telegram-based Claude cockpit fo
 9. `/acp model opus` или `/acp model sonnet` отвечает внутри `Codex Control`
 10. Обычный prompt в `Codex Control` реально получает ответ от Claude ACP
 11. Онбординг не врёт о реальном UX
+12. В явном виде зафиксировано, какой install mode выбрал пользователь: `hardened` или `portable`
 
 ## References
 - [Публичный онбординг на русском](references/onboarding-ru.md)
@@ -98,3 +104,4 @@ description: "Guides setup and maintenance of a Telegram-based Claude cockpit fo
 5. какой model id использовать для реального backend
 6. какие конфиг-риски или footguns остались
 7. хватает ли в текущем OpenClaw нужных ACP behaviors для стабильного persistent Claude path
+8. какой install mode выбран (`hardened` или `portable`) и что это означает для будущих обновлений

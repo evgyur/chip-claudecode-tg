@@ -4,6 +4,21 @@ This note is for operators who already run OpenClaw as a self-hosted service and
 
 It is intentionally generic and does not assume any private host layout.
 
+## 0. Decide whether you are shipping hardened mode or portable mode
+
+Before rollout, decide which promise you are making to the user.
+
+### Hardened mode
+- you are willing to patch or replace installed OpenClaw runtime artifacts for stronger Claude cockpit persistence
+- you must also own the post-update verification burden, because a future update can overwrite that runtime layer
+
+### Portable mode
+- you are not patching installed runtime/system files
+- you rely on stock OpenClaw behavior plus honest operator recovery steps
+- the cockpit can still be useful, but persistence/recovery is weaker and more manual
+
+Do not blur these two modes in rollout notes.
+
 ## 1. Confirm the real runtime path first
 
 Do not assume the active gateway is running from your source checkout.

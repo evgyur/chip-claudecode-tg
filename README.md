@@ -52,6 +52,37 @@ mkdir -p ~/.openclaw/skills/public && \
 cp -R /tmp/chip-claudecode-tg/chip-claudecode-tg ~/.openclaw/skills/public/
 ```
 
+## Install-time decision: patched vs portable mode
+This skill should not silently assume that patching installed OpenClaw runtime files is acceptable.
+
+During setup, the agent/operator must ask the user one explicit question:
+
+- **Hardened mode** — allow a live system/runtime patch for better Claude cockpit persistence and self-heal
+- **Portable mode** — do not patch installed OpenClaw runtime files; cockpit still works, but recovery is less graceful and may require warmup/retry/manual reset after restarts or stale-session failures
+
+What the user is choosing:
+
+### Hardened mode
+- best reliability for persistent Claude cockpit
+- can include live edits to installed OpenClaw `dist` / runtime files
+- good when the operator wants the strongest recovery behavior now
+- important downside: a package update can overwrite that live patch
+
+### Portable mode
+- no live system-file patching
+- safer for people who do not want installer-time edits to installed runtime files
+- cockpit should still be usable through ordinary ACP setup, but with more honest limits:
+  - first `/acp status` after restart may fail during warmup
+  - stale persistent sessions may need `/acp reset`
+  - recovery may be manual instead of self-healing
+  - false Claude-quota hints may still depend on the installed OpenClaw version
+
+Recommended wording for the install question:
+
+> Do you want **hardened mode** with a live OpenClaw runtime patch for stronger Claude cockpit recovery, knowing the patch can be overwritten by future updates, or **portable mode** with no system-file patching and slightly weaker recovery?
+
+The skill should record or restate the user's choice before applying config or rollout steps.
+
 ## Verify installation
 Confirm the skill files are in place:
 
@@ -98,6 +129,7 @@ Do not assume long provider/model ids are the canonical control surface unless y
 - Treat the first failed `/acp status` right after restart as a signal to verify warmup, not as final proof that the entire setup is broken.
 - A generic `ACP_TURN_FAILED` with `acpx exited with code 1` can be a Claude session or extra-usage cap, not only a broken Telegram binding.
 - Stable persistent mode depends on OpenClaw preserving the right `cwd` and `backend`, not replaying stale `model` values, and refusing to resurrect dead ACP identities.
+- If the operator chose **portable mode**, keep user expectations honest: the cockpit can still work well enough for normal use, but it may need explicit `/acp reset`, model re-selection, or a second attempt after restart.
 
 ## Success in 5 minutes
 A successful setup looks like this:

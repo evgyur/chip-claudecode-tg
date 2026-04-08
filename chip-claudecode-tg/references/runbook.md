@@ -23,6 +23,32 @@
 - Claude CLI установлен на том же сервере
 - Claude CLI уже залогинен под тем же runtime-user
 
+## Обязательное install-time решение: hardened vs portable
+До любых config/runtime правок агент или оператор должен спросить пользователя, какой режим нужен.
+
+### Вопрос, который надо задать
+> Хочешь **hardened mode** с live patch установленного OpenClaw runtime ради более устойчивого Claude cockpit, понимая, что такой патч может слететь при следующем обновлении, или **portable mode** без правки системных файлов, но с более слабым recovery?
+
+### Hardened mode
+Использовать, если:
+- человеку важнее максимальная устойчивость persistent Claude cockpit прямо сейчас
+- допустим live patch установленного runtime
+- оператор готов после обновлений проверять, не слетел ли этот слой hardening
+
+### Portable mode
+Использовать, если:
+- человек не хочет, чтобы install flow правил системные/runtime-файлы
+- важнее переносимость и предсказуемость обновлений, чем идеальный self-heal
+
+Что это значит practically:
+- Claude cockpit всё ещё можно поднять и использовать
+- но нужно честно считать его **best-effort persistent**, а не идеально self-healing
+- после restart/warmup/stale-session событий могут понадобиться:
+  - повтор `/acp status`
+  - `/acp reset`
+  - повторная установка модели (`/acp model opus` / `sonnet`)
+  - повтор обычного prompt после reset
+
 ## Шаги поднятия
 ### 1) Создать Telegram supergroup
 Создай отдельный чат под Claude work.
@@ -98,6 +124,22 @@
 
 Если ответ пришёл — bind и Claude runtime реально работают.
 
+## Что делать по режимам после smoke
+
+### Если выбран hardened mode
+- можно дополнительно применить runtime hardening / live patch, если оператор на это согласен
+- обязательно зафиксировать, что этот слой может быть overwritten future updates
+- обязательно оставить post-update runbook, как проверять, не слетел ли hardening
+
+### Если выбран portable mode
+- не патчить установленный OpenClaw runtime
+- оставить систему на стандартном behavior installed build
+- в онбординге сразу предупредить пользователя, что:
+  - первый status после restart может быть ложным негативом из-за warmup
+  - stuck lane лечится через `/acp reset`
+  - обычный prompt после reset — часть нормального recovery path
+  - это не “идеальный persistent cockpit”, а более мягкий режим без системного patch layer
+
 ## Главный footgun
 `gateway config.patch` по массивам может перезаписать весь массив, а не merge’ить его.
 
@@ -130,6 +172,7 @@
 - `/acp model opus` или `/acp model sonnet` отвечает
 - обычный prompt в `Codex Control` получает ответ от Claude ACP
 - онбординг не врёт и соответствует live-поведению
+- выбранный режим (`hardened` или `portable`) явно зафиксирован и объяснён оператором
 
 
 ## Troubleshooting footgun — restart warmup and stale persistent sessions

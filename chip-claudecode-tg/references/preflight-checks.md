@@ -62,3 +62,14 @@ Practical rule:
 - do not treat the first failed `/acp status` immediately after restart as final proof that the whole setup is broken;
 - wait a moment and retry;
 - if a persistent session still looks dead after warmup, reset or heal that session state before rebuilding the whole Telegram binding.
+
+## 8) Decide patch policy before install
+Before the cockpit is installed, the agent/operator should ask the user to choose one of these modes:
+
+- **hardened mode** — allow a live patch of installed OpenClaw runtime files for stronger persistent Claude recovery
+- **portable mode** — do not patch installed runtime/system files; accept a softer recovery path instead
+
+What to confirm explicitly:
+- the chosen mode
+- that hardened mode can be overwritten by a future OpenClaw/package update
+- that portable mode still works, but may need `/acp reset`, warmup retry, or model re-selection more often
